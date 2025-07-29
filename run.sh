@@ -37,4 +37,4 @@ fi
 
 # Jalankan
 echo "🚀 Running role '$ROLE'..."
-exec "$PYTHON_EXEC" "$MAIN_PATH"
+exec "$PYTHON_EXEC" "$MAIN_PATH" "${@:2}"
