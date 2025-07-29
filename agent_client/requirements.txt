@@ -1,0 +1,5 @@
+websocket-client
+mss
+pynput
+pillow
+python-dotenv

@@ -1,0 +1,27 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "server"
+    },
+    {
+      "path": "agent_client"
+    },
+    {
+      "path": "control_client"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": ".venv/bin/python"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "esbenp.prettier-vscode",
+      "editorconfig.editorconfig"
+    ]
+  }
+}

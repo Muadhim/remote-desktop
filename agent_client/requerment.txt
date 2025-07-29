@@ -1,4 +1,0 @@
-websockets
-mss
-pynput
-pillow

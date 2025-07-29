@@ -1,3 +1,4 @@
 websockets
 pillow
 tk
+python-dotenv
