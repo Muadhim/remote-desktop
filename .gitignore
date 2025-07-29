@@ -1,2 +1,9 @@
-*/.venv
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+**/.venv/
+
+# Dotenv
 .env
