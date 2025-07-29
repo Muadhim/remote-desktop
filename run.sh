@@ -1,19 +1,41 @@
 #!/bin/bash
 
-echo "📦 Menginstall dependensi..."
+set -e
 
-cd server && pip install -r requirements.txt && cd ..
-cd agent_client && pip install -r requirements.txt && cd ..
-cd control_client && pip install -r requirements.txt && cd ..
+ROLE=$1
+PROJECT_DIR=$(pwd)
 
-echo "✅ Semua dependensi terinstall!"
-echo "🚀 Menjalankan server..."
-uvicorn server.main:app --reload &
-sleep 2
+if [[ -z "$ROLE" ]]; then
+  echo "❌ Role tidak diberikan."
+  echo "Gunakan: ./run.sh [server|agent_client|control_client]"
+  exit 1
+fi
 
-echo "🖥️  Menjalankan agent client..."
-python3 agent_client/agent.py &
-sleep 2
+ROLE_PATH="$PROJECT_DIR/$ROLE"
+VENV_PATH="$ROLE_PATH/.venv"
+MAIN_PATH="$ROLE_PATH/main.py"
+ACTIVATE="$VENV_PATH/bin/activate"
 
-echo "🕹️  Menjalankan controller client..."
-python3 control_client/control.py
+# Cek folder role
+if [ ! -d "$ROLE_PATH" ]; then
+  echo "❌ Folder role '$ROLE' tidak ditemukan."
+  exit 1
+fi
+
+# Cek .venv
+if [ ! -d "$VENV_PATH" ]; then
+  echo "❌ .venv belum dibuat untuk '$ROLE'."
+  echo "💡 Jalankan: python3 generate_project_setup.py"
+  exit 1
+fi
+
+# Cek main.py
+if [ ! -f "$MAIN_PATH" ]; then
+  echo "❌ File main.py tidak ditemukan di $ROLE_PATH"
+  exit 1
+fi
+
+# Jalankan
+echo "🚀 Menjalankan role '$ROLE'..."
+source "$ACTIVATE"
+python "$MAIN_PATH"
