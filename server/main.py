@@ -4,9 +4,26 @@ from fastapi import FastAPI
 from config import SERVER_HOST, SERVER_PORT
 import sys
 from ws_agent import ws_agent_router
+from database import get_db, Base, engine  
+from contextlib import asynccontextmanager
 
 app = FastAPI()
 app.include_router(ws_agent_router)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Auto-create table (jika development)
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    print("✅ Server started and DB initialized")
+    yield
+    # Shutdown
+    print("🛑 Server shutting down")
+
+# Buat instance app dengan lifespan
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 async def index():
