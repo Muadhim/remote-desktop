@@ -48,11 +48,13 @@ for role in roles:
     settings_path = os.path.join(vscode_path, "settings.json")
 
     settings = {
-        "python.pythonPath": os.path.join(".venv", "Scripts" if is_windows else "bin", "python.exe" if is_windows else "python"),
+        "python.defaultInterpreterPath": os.path.join(".venv", "Scripts" if is_windows else "bin", "python.exe" if is_windows else "python"),
         "editor.formatOnSave": True,
         "python.formatting.provider": "autopep8",
         "python.linting.enabled": True,
-        "python.linting.pylintEnabled": True
+        "python.linting.pylintEnabled": True,
+        "python.analysis.autoImportCompletions": True,
+        "python.languageServer": "Pylance"
     }
 
     with open(settings_path, "w") as f:
