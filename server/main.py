@@ -3,14 +3,10 @@ import asyncio
 from fastapi import FastAPI
 from config import SERVER_HOST, SERVER_PORT
 import sys
-from controllers import auth
+from controllers import auth, user
 from ws_agent import ws_agent_router
-from database import get_db, Base, engine  
+from database import Base, engine  
 from contextlib import asynccontextmanager
-
-app = FastAPI()
-app.include_router(ws_agent_router)
-app.include_router(auth.router)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,6 +21,9 @@ async def lifespan(app: FastAPI):
 
 # Buat instance app dengan lifespan
 app = FastAPI(lifespan=lifespan)
+app.include_router(ws_agent_router)
+app.include_router(auth.router)
+app.include_router(user.router)
 
 @app.get("/")
 async def root():
