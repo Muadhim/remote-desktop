@@ -4,4 +4,5 @@ python-dotenv
 sqlalchemy
 asyncpg
 databases
-python-dotenv
+passlib[bcrypt]
+python-jose[cryptography]

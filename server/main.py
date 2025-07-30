@@ -3,13 +3,14 @@ import asyncio
 from fastapi import FastAPI
 from config import SERVER_HOST, SERVER_PORT
 import sys
+from controllers import auth
 from ws_agent import ws_agent_router
 from database import get_db, Base, engine  
 from contextlib import asynccontextmanager
 
 app = FastAPI()
 app.include_router(ws_agent_router)
-
+app.include_router(auth.router)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,7 +27,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
-async def index():
+async def root():
     return {"message": "Hello, World"}
 
 async def run_direct():
