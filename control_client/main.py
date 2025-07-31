@@ -1,37 +1,50 @@
-# control_client/control.py
-import asyncio, websockets, tkinter as tk, base64, json
-from PIL import Image, ImageTk
-import io
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel
+from PyQt6.QtCore import Qt
 
-class ControllerApp:
-    def __init__(self, root):
-        self.root = root
-        self.canvas = tk.Canvas(root, width=800, height=600)
-        self.canvas.pack()
-        self.canvas.bind("<Button-1>", self.send_click)
-        self.image_id = None
+class ControlApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Device Control Panel")
+        self.setGeometry(100, 100, 300, 200)
+        self.init_ui()
 
-    async def run(self):
-        self.ws = await websockets.connect("ws://localhost:8000/ws/controller")
-        await self.receive_loop()
+    def init_ui(self):
+        layout = QVBoxLayout()
 
-    async def receive_loop(self):
-        while True:
-            data = json.loads(await self.ws.recv())
-            if data["type"] == "image":
-                raw = base64.b64decode(data["data"])
-                img = Image.open(io.BytesIO(raw))
-                self.tk_img = ImageTk.PhotoImage(img)
-                if self.image_id:
-                    self.canvas.itemconfig(self.image_id, image=self.tk_img)
-                else:
-                    self.image_id = self.canvas.create_image(0, 0, anchor="nw", image=self.tk_img)
+        self.status_label = QLabel("Status: Unknown", self)
+        self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.status_label)
 
-    def send_click(self, event):
-        asyncio.create_task(self.ws.send(json.dumps({
-            "type": "click", "x": event.x, "y": event.y
-        })))
+        self.btn_start = QPushButton("Start", self)
+        self.btn_start.clicked.connect(self.start_device)
+        layout.addWidget(self.btn_start)
 
-root = tk.Tk()
-app = ControllerApp(root)
-asyncio.run(app.run())
+        self.btn_stop = QPushButton("Stop", self)
+        self.btn_stop.clicked.connect(self.stop_device)
+        layout.addWidget(self.btn_stop)
+
+        self.btn_restart = QPushButton("Restart", self)
+        self.btn_restart.clicked.connect(self.restart_device)
+        layout.addWidget(self.btn_restart)
+
+        self.setLayout(layout)
+
+    def start_device(self):
+        self.status_label.setText("Status: Running")
+        print("Device started")
+
+    def stop_device(self):
+        self.status_label.setText("Status: Stopped")
+        print("Device stopped")
+
+    def restart_device(self):
+        self.status_label.setText("Status: Restarting...")
+        print("Device restarting...")
+        # Simulasi restart delay (optional)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = ControlApp()
+    window.show()
+    sys.exit(app.exec())

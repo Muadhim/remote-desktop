@@ -1,4 +1,4 @@
 websockets
 pillow
-tk
+PyQt6
 python-dotenv
