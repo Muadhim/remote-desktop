@@ -1,19 +1,9 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.pool import NullPool
-import os
-from dotenv import load_dotenv
-from contextlib import asynccontextmanager
 
-# Load from .env file (kalau belum)
-load_dotenv()
+from config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 
-# Ganti dengan konfigurasi dari .env atau config.py
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASS = os.getenv("DB_PASS", "postgres")
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "remote_desktop")
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -36,7 +26,6 @@ Base = declarative_base()
 
 
 # Dependency: async generator to use in FastAPI routes
-@asynccontextmanager
 async def get_db():
     async with AsyncSessionLocal() as session:
         try:

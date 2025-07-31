@@ -5,18 +5,12 @@ from config import SERVER_HOST, SERVER_PORT
 import sys
 from controllers import auth, user
 from ws_agent import ws_agent_router
-from database import Base, engine  
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Auto-create table (jika development)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
-    print("✅ Server started and DB initialized")
+    print("✅ Server started")
     yield
-    # Shutdown
     print("🛑 Server shutting down")
 
 # Buat instance app dengan lifespan

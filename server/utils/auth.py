@@ -5,14 +5,10 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-import os
 
+from config import ALGORITHM, SECRET_KEY
 from database import get_db
 from database.models import User
-
-SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
