@@ -6,7 +6,7 @@ from sqlalchemy import select
 from database import get_db
 from database.models import User
 from schemas.response_schema import ResponseSchema
-from schemas.user import Token, UserCreate, UserLogin, UserResponse
+from schemas.user_schema import Token, UserCreate, UserLogin, UserResponse
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
