@@ -18,7 +18,7 @@ class Agent(Base):
     __tablename__ = "agents"
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
     hostname = Column(String, nullable=True)
     os = Column(String, nullable=True)
