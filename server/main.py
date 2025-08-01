@@ -3,7 +3,7 @@ import asyncio
 from fastapi import FastAPI
 from config import SERVER_HOST, SERVER_PORT
 import sys
-from controllers import auth, user
+from controllers import agent, auth, user
 from ws_agent import ws_agent_router
 from contextlib import asynccontextmanager
 
@@ -18,6 +18,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(ws_agent_router)
 app.include_router(auth.router)
 app.include_router(user.router)
+app.include_router(agent.router)
 
 @app.get("/")
 async def root():
