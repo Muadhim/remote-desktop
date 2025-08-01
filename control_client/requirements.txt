@@ -2,3 +2,4 @@ websockets
 pillow
 PyQt6
 python-dotenv
+requests

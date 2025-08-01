@@ -1,50 +1,43 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QMenuBar
+from PyQt6.QtGui import QAction
 
-class ControlApp(QWidget):
+from components.login_page import LoginPage
+from components.register_page import RegisterPage
+
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Device Control Panel")
-        self.setGeometry(100, 100, 300, 200)
-        self.init_ui()
+        self.setWindowTitle("Agent Control Panel")
+        self.setGeometry(100, 100, 400, 300)
 
-    def init_ui(self):
-        layout = QVBoxLayout()
+        # Stacked widget untuk ganti halaman
+        self.stacked_widget = QStackedWidget()
+        self.setCentralWidget(self.stacked_widget)
 
-        self.status_label = QLabel("Status: Unknown", self)
-        self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.status_label)
+        # Tambah halaman ke stack
+        self.login_page = LoginPage()
+        self.register_page = RegisterPage()
+        self.stacked_widget.addWidget(self.login_page)
+        self.stacked_widget.addWidget(self.register_page)
 
-        self.btn_start = QPushButton("Start", self)
-        self.btn_start.clicked.connect(self.start_device)
-        layout.addWidget(self.btn_start)
+        # Menu
+        menu_bar = QMenuBar()
+        self.setMenuBar(menu_bar)
 
-        self.btn_stop = QPushButton("Stop", self)
-        self.btn_stop.clicked.connect(self.stop_device)
-        layout.addWidget(self.btn_stop)
+        page_menu = menu_bar.addMenu("Menu")
 
-        self.btn_restart = QPushButton("Restart", self)
-        self.btn_restart.clicked.connect(self.restart_device)
-        layout.addWidget(self.btn_restart)
+        login_action = QAction("Login", self)
+        register_action = QAction("Register", self)
 
-        self.setLayout(layout)
+        login_action.triggered.connect(lambda: self.stacked_widget.setCurrentWidget(self.login_page))
+        register_action.triggered.connect(lambda: self.stacked_widget.setCurrentWidget(self.register_page))
 
-    def start_device(self):
-        self.status_label.setText("Status: Running")
-        print("Device started")
-
-    def stop_device(self):
-        self.status_label.setText("Status: Stopped")
-        print("Device stopped")
-
-    def restart_device(self):
-        self.status_label.setText("Status: Restarting...")
-        print("Device restarting...")
-        # Simulasi restart delay (optional)
+        page_menu.addAction(login_action)
+        page_menu.addAction(register_action)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = ControlApp()
+    window = MainWindow()
     window.show()
     sys.exit(app.exec())
